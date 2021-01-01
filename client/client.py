@@ -1,30 +1,51 @@
 import os
-import sys
 import time
-import requests
 import pathlib
+from observer import Observer
 
+SLEEP_CONSTANT = 2.5
 
-def scan(root_path : pathlib.Path):
-    pass
+def on_modify(msg):
+    print("modified ", msg)
+
+def on_move(msg):
+    print("moved ", msg)
+
+def on_create(msg):
+    print("new ", msg)
+
+def on_delete(msg):
+    print("deleted ", msg)
+
+def scan(root_path : pathlib.Path, folders, file_details, ):
+    observer = Observer(root_path, folders, file_details, on_modify, on_move, on_create, on_delete)
+    while True:
+        observer.watch()
+        time.sleep(SLEEP_CONSTANT)
+    
 
 def init_client(root_path : pathlib.Path):
-    folders = []
+    folder_details = {}
     file_details = {}
     for path, _, files in os.walk(root_path):
-        folders.append(path)
+        folder_stats = os.stat(path)
+        folder_details[folder_stats.st_ino] = [folder_stats, pathlib.Path(path).relative_to(root_path)]
         for file in files:
-            stats = os.stat(os.path.join(path, file))
-            file_details[stats.st_ino] = stats
-    return folders, file_details
+            file_path = pathlib.Path(os.path.join(path, file))
+            stats = os.stat(file_path)
+            file_details[stats.st_ino] = [stats, file_path.relative_to(root_path)]
+    return folder_details, file_details
 
 def main():
     
     DATA_DIR = "client/listen/"
-    root_path = pathlib.Path(DATA_DIR).absolute()
+    root_path = pathlib.Path(DATA_DIR)
 
-    folders, file_details = init_client(root_path)
-    scan(root_path, folders, file_details)
+    folder_details, file_details = init_client(root_path)
+    print(folder_details)
+    print("-----------")
+    print(file_details)
+    scan(root_path, folder_details, file_details)
 
 if __name__ == "__main__":
     main()
