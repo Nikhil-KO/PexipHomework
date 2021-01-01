@@ -1,5 +1,4 @@
 import os
-import time
 import pathlib
 
 class Observer:
@@ -58,3 +57,12 @@ class Observer:
 			self.check_folder(path, active_folders)
 			for file in files:
 				self.check_file(path, file, active_files)
+		# check for deleted folders/files
+		deleted_folder = set(self.folder_details.keys()) - set(active_folders)
+		deleted_files = set(self.file_details.keys()) -  set(active_files)
+		for f in deleted_folder:
+			self.on_delete("directory " + str(f))
+			del self.folder_details[f]
+		for f in deleted_files:
+			self.on_delete("file " + str(f))
+			del self.file_details[f]
