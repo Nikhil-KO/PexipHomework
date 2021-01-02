@@ -61,7 +61,7 @@ class Observer:
 			self.on_modify(str(new_path))
 
 	def watch(self):
-		print("watching folder")
+		#print("watching folder")
 		active_folders = []
 		active_files = []
 		for path, _, files in os.walk(self.root_path):
