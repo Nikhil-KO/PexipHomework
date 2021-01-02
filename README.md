@@ -15,6 +15,8 @@ Dropbox assignment for Pexip
 
 # TODO
 1. move detail inito observer class 
+2. Compress data
+3. coroutines/threads
 
 # Possible improvements
 1. User model, each client has an ID/JSON web token and server has folders for each user.
