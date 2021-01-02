@@ -1,5 +1,6 @@
 import requests
 
+# Class sends the information from the handler to server
 class Dispatcher:
 
     def __init__(self, url : str) -> None:

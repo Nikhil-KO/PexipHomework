@@ -3,11 +3,22 @@ import pathlib
 
 class Observer:
 
-	def __init__(self, root_path : pathlib.Path, folder_details : dict, file_details : dict,
-					on_modify, on_move, on_create, on_delete) -> None:
+	# Given a path and functions to call in the case of events set up the observer
+	def __init__(self, root_path : pathlib.Path, on_modify, on_move, on_create, on_delete) -> None:
 		self.root_path = root_path
-		self.folder_details = folder_details
-		self.file_details = file_details
+		self.folder_details = {}
+		self.file_details = {}
+
+		# init observered folder
+		for path, _, files in os.walk(root_path):
+			folder_stats = os.stat(path)
+			self.folder_details[folder_stats.st_ino] = [folder_stats, pathlib.Path(path).relative_to(root_path)]
+			for file in files:
+				file_path = pathlib.Path(os.path.join(path, file))
+				stats = os.stat(file_path)
+				self.file_details[stats.st_ino] = [stats, file_path.relative_to(root_path)]
+
+		# link functions
 		self.on_modify = on_modify
 		self.on_move = on_move
 		self.on_create = on_create
