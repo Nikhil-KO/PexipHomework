@@ -6,6 +6,7 @@ from dropboxService import DropBoxService
 
 app = flask.Flask(__name__)
 dropbox : DropBoxService = None
+# TODO make command line
 DATA_DIR = pathlib.Path("server_data/")
 
 @app.route('/', methods=["POST"])
@@ -74,13 +75,6 @@ def main():
     print("starting server")
     global dropbox
     dropbox = DropBoxService(pathlib.Path("server_data/"))
-    # if len(sys.argv) < 2:
-    #     raise "Directory to listen on must be passed to script"
-    #     exit
-    # DATA_DIR = sys.argv[1]
-
-    #print(DATA_DIR)
-
     app.run(port=5000, host='0.0.0.0')
 
 if __name__ == "__main__":

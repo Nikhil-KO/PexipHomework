@@ -24,6 +24,7 @@ class Observer:
 		self.on_create = on_create
 		self.on_delete = on_delete
 
+	# Check given folder for change
 	def check_folder(self, path : str, active_folders : list):
 		new_path = pathlib.Path(path).relative_to(self.root_path)
 		folder_stats = os.stat(path)
@@ -39,6 +40,7 @@ class Observer:
 			self.folder_details[folder_stats.st_ino][1] = new_path
 			self.on_move(old_path, new_path)
 		
+	# check given file for change
 	def check_file(self, path : str, file : str, active_files : list):
 		file_path = pathlib.Path(os.path.join(path, file))
 		new_stats = os.stat(file_path)
@@ -61,7 +63,6 @@ class Observer:
 			self.on_modify(str(new_path))
 
 	def watch(self):
-		#print("watching folder")
 		active_folders = []
 		active_files = []
 		for path, _, files in os.walk(self.root_path):
