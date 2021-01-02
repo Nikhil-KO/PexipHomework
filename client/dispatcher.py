@@ -22,12 +22,18 @@ class Dispatcher:
         x = requests.post(self.url + 'modify_file', data=info, files=files)
         print(x)
 
-    def delete_directory(self, path : str):
+    def delete(self, path : str, directory : bool):
         data = {'path': path}
-        x = requests.post(self.url + 'delete_directory', data=data)
+        if directory:
+            x = requests.post(self.url + 'delete_directory', data=data)
+        else:
+            x = requests.post(self.url + 'delete_file', data=data)
         print(x)
-
-    def delete_file(self, path : str):
-        data = {'path': path}
-        x = requests.post(self.url + 'delete_file', data=data)
+    
+    def move(self, path_from : str, path_to : str):
+        data = {
+            'from': path_from,
+            'to': path_to
+            }
+        x = requests.post(self.url + 'move', data=data)
         print(x)
