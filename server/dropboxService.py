@@ -2,6 +2,7 @@ import os
 import shutil
 import pathlib
 
+# Class to recreate file system changes on client here on server side
 class DropBoxService:
     
     def __init__(self, dir_loc : pathlib.Path) -> None:
@@ -21,9 +22,10 @@ class DropBoxService:
     
     def modify_file(self, path : str, data):
         file_path = os.path.join(self._dir_loc, path)
-        # TODO 
         # safety check
-        # if not os.path.exists(file_path):
+        if not os.path.exists(file_path):
+            self.create_file(path, data)
+            return
         with open(file_path, 'wb') as file:
             file.write(data)
 
