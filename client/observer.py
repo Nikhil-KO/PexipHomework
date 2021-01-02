@@ -61,8 +61,8 @@ class Observer:
 		deleted_folder = set(self.folder_details.keys()) - set(active_folders)
 		deleted_files = set(self.file_details.keys()) -  set(active_files)
 		for f in deleted_folder:
-			self.on_delete("directory " + str(f))
+			self.on_delete(self.folder_details[f][1], True)
 			del self.folder_details[f]
 		for f in deleted_files:
-			self.on_delete("file " + str(f))
+			self.on_delete(self.file_details[f][1], False)
 			del self.file_details[f]

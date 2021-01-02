@@ -8,10 +8,14 @@ SLEEP_CONSTANT = 2.5
 dispatcher : Dispatcher = None
 DATA_DIR = "listen/"
 
-def on_modify(msg):
-    print("modified ", msg)
+def on_modify(path: pathlib.Path):
+    file_path = os.path.join(DATA_DIR, path)
+    with open(file_path, 'rb') as f:
+        dispatcher.modify_file(path, f)
+    print("modified ", str(path))
 
 def on_move(msg):
+
     print("moved ", msg)
 
 def on_create(path : pathlib.Path, directory : bool):
@@ -21,10 +25,14 @@ def on_create(path : pathlib.Path, directory : bool):
         file_path = os.path.join(DATA_DIR, path)
         with open(file_path, 'rb') as f:
             dispatcher.create_file(path, f)
-    print("new ", path)
+    print("new ", str(path))
 
-def on_delete(msg):
-    print("deleted ", msg)
+def on_delete(path : pathlib.Path, directory : bool):
+    if (directory):
+        dispatcher.delete_directory(str(path))
+    else:
+        dispatcher.delete_file(str(path))
+    print("deleted ", str(path))
 
 def scan(root_path : pathlib.Path, folders, file_details, ):
     observer = Observer(root_path, folders, file_details, on_modify, on_move, on_create, on_delete)
