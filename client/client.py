@@ -14,9 +14,9 @@ def on_modify(path: pathlib.Path):
         dispatcher.modify_file(path, f)
     print("modified ", str(path))
 
-def on_move(msg):
-
-    print("moved ", msg)
+def on_move(path_from : pathlib.Path, path_to : pathlib.Path):
+    dispatcher.move(str(path_from), str(path_to))
+    print("moved ", str(path_from), " to ", str(path_to))
 
 def on_create(path : pathlib.Path, directory : bool):
     if (directory):
@@ -28,10 +28,7 @@ def on_create(path : pathlib.Path, directory : bool):
     print("new ", str(path))
 
 def on_delete(path : pathlib.Path, directory : bool):
-    if (directory):
-        dispatcher.delete_directory(str(path))
-    else:
-        dispatcher.delete_file(str(path))
+    dispatcher.delete(path, directory)
     print("deleted ", str(path))
 
 def scan(root_path : pathlib.Path, folders, file_details, ):

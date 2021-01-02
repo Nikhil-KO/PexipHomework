@@ -26,7 +26,7 @@ class Observer:
 		old_path = self.folder_details[folder_stats.st_ino][1]
 		if old_path != new_path:
 			self.folder_details[folder_stats.st_ino][1] = new_path
-			self.on_move("directory from " + str(old_path) + " to " + str(new_path))
+			self.on_move(old_path, new_path)
 		
 	def check_file(self, path : str, file : str, active_files : list):
 		file_path = pathlib.Path(os.path.join(path, file))
@@ -41,9 +41,9 @@ class Observer:
 		old_file_details = self.file_details[new_stats.st_ino]
 		# file renamed/moved
 		if old_file_details[1] != new_path:
-			msg = "moved from " + str(old_file_details[1]) + " to " + str(new_path)
+			old_path = old_file_details[1]
 			self.file_details[new_stats.st_ino][1] = new_path
-			self.on_move(msg)
+			self.on_move(old_path, new_path)
 		# file modifed
 		if old_file_details[0].st_mtime != new_stats.st_mtime:
 			self.file_details[new_stats.st_ino][0] = new_stats
