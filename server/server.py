@@ -60,6 +60,16 @@ def delete_file():
     dropbox.delete_file(file_path)
     return "", 200
 
+@app.route('/move', methods=["POST"])
+def move_directory():
+    try:
+        dir_from = flask.request.form.to_dict()['from']
+        dir_to = flask.request.form.to_dict()['to']
+    except:
+        return "Bad request", 400
+    dropbox.move(dir_from, dir_to)
+    return "", 200
+
 def main():
     print("starting server")
     global dropbox

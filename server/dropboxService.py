@@ -14,6 +14,9 @@ class DropBoxService:
 
     def create_file(self, new_path : str, data):
         new_file_path = os.path.join(self._dir_loc, new_path)
+        file_dir = os.path.dirname(pathlib.Path(new_file_path))
+        if not os.path.exists(file_dir):
+            os.makedirs(file_dir)
         data.save(new_file_path)
     
     def modify_file(self, path : str, data):
@@ -26,9 +29,19 @@ class DropBoxService:
 
     def delete_file(self, path : str):
         file_path = os.path.join(self._dir_loc, path)
-        os.remove(file_path)
+        try:
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
 
     def delete_directory(self, path : str):
         dir_path = os.path.join(self._dir_loc, path)
-        shutil.rmtree(dir_path)
-        
+        try:
+            shutil.rmtree(dir_path)
+        except FileNotFoundError:
+            pass
+    
+    def move(self, path_from : str, path_to : str):
+        path_from = os.path.join(self._dir_loc, path_from)
+        path_to = os.path.join(self._dir_loc, path_to)
+        shutil.move(path_from, path_to)
