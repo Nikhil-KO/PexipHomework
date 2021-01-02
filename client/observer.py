@@ -20,7 +20,7 @@ class Observer:
 		# new folder
 		if folder_stats.st_ino not in self.folder_details:
 			self.folder_details[folder_stats.st_ino] = [folder_stats, new_path]
-			self.on_create("directory " + str(new_path))
+			self.on_create(str(new_path), True)
 			return
 		# folder moved
 		old_path = self.folder_details[folder_stats.st_ino][1]
@@ -36,7 +36,7 @@ class Observer:
 		# new file
 		if new_stats.st_ino not in self.file_details:
 			self.file_details[new_stats.st_ino] = [new_stats, new_path]
-			self.on_create("file " + str(new_path))
+			self.on_create(new_path, False)
 			return
 		old_file_details = self.file_details[new_stats.st_ino]
 		# file renamed/moved

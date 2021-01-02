@@ -2,8 +2,11 @@ import os
 import time
 import pathlib
 from observer import Observer
+from dispatcher import Dispatcher
 
 SLEEP_CONSTANT = 2.5
+dispatcher : Dispatcher = None
+DATA_DIR = "listen/"
 
 def on_modify(msg):
     print("modified ", msg)
@@ -11,8 +14,14 @@ def on_modify(msg):
 def on_move(msg):
     print("moved ", msg)
 
-def on_create(msg):
-    print("new ", msg)
+def on_create(path : pathlib.Path, directory : bool):
+    if (directory):
+        dispatcher.create_directory(str(path))
+    else:
+        file_path = os.path.join(DATA_DIR, path)
+        with open(file_path, 'rb') as f:
+            dispatcher.create_file(path, f)
+    print("new ", path)
 
 def on_delete(msg):
     print("deleted ", msg)
@@ -38,13 +47,15 @@ def init_client(root_path : pathlib.Path):
 
 def main():
     
-    DATA_DIR = "client/listen/"
     root_path = pathlib.Path(DATA_DIR)
 
     folder_details, file_details = init_client(root_path)
     print(folder_details)
     print("-----------")
     print(file_details)
+    global dispatcher
+    dispatcher = Dispatcher('http://127.0.0.1:5000/')
+
     scan(root_path, folder_details, file_details)
 
 if __name__ == "__main__":
