@@ -32,8 +32,9 @@ def main():
     root_dir = pathlib.Path(sys.argv[1])
     if not os.path.exists(root_dir):
         print("Provided folder does not exist!")
+        exit()
     root_path = pathlib.Path(root_dir)
-    if len(sys.argv) > 3:
+    if len(sys.argv) >= 3:
         dispatcher = Dispatcher(sys.argv[2])
     else:
         dispatcher = Dispatcher('http://127.0.0.1:5000/') # send data to server
