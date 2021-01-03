@@ -5,9 +5,10 @@ import pathlib
 CHUNK_SIZE = 1048576
 
 # reference https://stackoverflow.com/questions/519633/lazy-method-for-reading-big-file-in-python
+# needed to implement a soft rolling checksum https://rsync.samba.org/tech_report/node3.html
 '''
 This class is designed to be given to each file, it stores the hash of each ~1MB block of data, and on change the check function should be run
-It computes the new hashs and when a block's data has changed it should be returned
+It computes the new hash's and when a block's data has changed it should be returned
 '''
 class PartialTransfer:
 
