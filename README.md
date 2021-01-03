@@ -76,6 +76,8 @@ This can be rerouted to a delete signal.
 3. Don't need to store ALL the files stats, just modified time is used
 4. More extensive testing i.e. Event handler and dispatcher, API testing using postman automated testing?
 5. Better use of pythons package system, using __init__ etc, not sure how they work, easier in Java/C# with packages/namespaces
+6. From the log I noticed a new connection is openned each time a request is used. It will be better to have a persistent connection such as a socket between the client and server 
+7. We can exploit the recursive nature of file systems and do not need to check the files in folders if they have not been modified, which will provide a big speed up for larger file systems. 
 
 # Time Log
 2 hours to figure out design and OS, pathlib libraries
