@@ -33,14 +33,18 @@ Requires Python 3+.
 
 Need to be in the directory of <code>client/</code> and <code>server/</code> respectively.
 
-    python client.py <dir to watch>
+    python client.py <dir to watch> <optional url to server>
+    e.g. python client.py listen/
 
     python server.py <dir to store>
+    e.g. python server.py server_data/
 
 # Asumptions
 1. The initial folder is empty, it is any easy change to copy the init folder on launch/empty.
-2. compressing files not required/provide speed up
+2. Compressing files not required/provide speed up
 3. Not worried about system endianness
+4. Flask server address is edited in code
+5. Server url can be given in command line but default is local host on port 5000
 
 # Tests
 The units tests ensure the Observer detects the required changes and server is able to recreate them on file system using the dropboxService, the link between them was tested manually multiple times using a variety of folders and files and file types.
@@ -67,4 +71,4 @@ This can be rerouted to a delete signal.
 2 hours to unit test and refactor
 
 # Final remarks
-The task was daunting at first but as soon I as figured out the <code>os.stats()</code> function has modification times and that file systems give folders/file unique id's it was quite fun to implement and if I wasn't restricted by time would very much like to implement the rsync algorith.
+The task was daunting at first but as soon I as figured out the <code>os.stats()</code> function and that file systems give folders/file unique id's it was quite fun to implement and if I wasn't restricted by time would very much like to implement the rsync algorithm.

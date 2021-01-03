@@ -1,10 +1,12 @@
 import os
+import sys
 import time
 import pathlib
 from observer import Observer
 from dispatcher import Dispatcher
 from eventHandler import EventHandler
 
+#TODO make log not print
 SLEEP_CONSTANT = 2.5
 
 ''' 
@@ -24,12 +26,17 @@ def scan(root_path : pathlib.Path, dispatcher : Dispatcher):
         print("ending client")
     
 def main():
-
-    # TODO make command line arg
-    DATA_DIR = "listen/" # for testing
-    root_path = pathlib.Path(DATA_DIR)
-
-    dispatcher = Dispatcher('http://127.0.0.1:5000/') # send data to server
+    if len(sys.argv) < 2:
+        print("Need to provide path to folder to listen to")
+        exit()
+    root_dir = pathlib.Path(sys.argv[1])
+    if not os.path.exists(root_dir):
+        print("Provided folder does not exist!")
+    root_path = pathlib.Path(root_dir)
+    if len(sys.argv) > 3:
+        dispatcher = Dispatcher(sys.argv[2])
+    else:
+        dispatcher = Dispatcher('http://127.0.0.1:5000/') # send data to server
     scan(root_path, dispatcher)
 
 if __name__ == "__main__":
