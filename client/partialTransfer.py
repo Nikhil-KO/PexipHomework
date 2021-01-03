@@ -38,14 +38,23 @@ class PartialTransfer:
                 hash = hashlib.md5(data).hexdigest()
                 if block >= len(self.file_hash) or self.file_hash[block] != hash:
                     print("Block ", block, " has changed!")
-                    changed_blocks.append(block)
+                    changed_blocks.append((block, data))
                     self.file_hash[block] = hash
                 block += 1
         return changed_blocks, CHUNK_SIZE
-    
+
+def recreate(path : pathlib.Path, changes, chunk_size):
+    with open(path, 'wb') as f:
+        for change in changes:
+            position = change[0] * chunk_size
+            f.seek(position)
+            f.write(change[1])
+
 # Testing
 if __name__ == "__main__":
-    path = pathlib.Path('listen/ok.txt')
-    t = PartialTransfer(path)
+    listenFile = pathlib.Path('listen/partialTestSource.txt')
+    source = PartialTransfer(listenFile)
     print("------ BREAKPOINT HERE -------")
-    t.check()
+    changes, chunk_size = source.check()
+    destFile = pathlib.Path('listen/partialTestDest.txt')
+    recreate(destFile, changes, chunk_size)
