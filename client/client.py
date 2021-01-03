@@ -2,11 +2,11 @@ import os
 import sys
 import time
 import pathlib
+import logging
 from observer import Observer
 from dispatcher import Dispatcher
 from eventHandler import EventHandler
 
-#TODO make log not print
 SLEEP_CONSTANT = 2.5
 
 ''' 
@@ -19,19 +19,23 @@ def scan(root_path : pathlib.Path, dispatcher : Dispatcher):
                         handler.on_create, handler.on_delete) 
     try:
         while True:
-            print("listening")
             observer.watch()
             time.sleep(SLEEP_CONSTANT)
     except KeyboardInterrupt:
-        print("ending client")
+        logging.info("client shutdown")
     
 def main():
+    logging.basicConfig(format="%(levelname)s:%(asctime)s:%(message)s",
+        level=logging.DEBUG, datefmt='%d/%m/%Y %I:%M:%S %p')
+    logging.info("Logger started")
     if len(sys.argv) < 2:
         print("Need to provide path to folder to listen to")
+        logging.error("attempt to start client without folder")
         exit()
     root_dir = pathlib.Path(sys.argv[1])
     if not os.path.exists(root_dir):
         print("Provided folder does not exist!")
+        logging.error("attempt to input invalid listeing directory")
         exit()
     root_path = pathlib.Path(root_dir)
     if len(sys.argv) >= 3:

@@ -1,4 +1,5 @@
 import os
+import logging
 import pathlib
 from dispatcher import Dispatcher
 
@@ -16,12 +17,12 @@ class EventHandler:
             with open(file_path, 'rb') as f:
                 self.dispatcher.modify_file(path, f)
         except FileNotFoundError:
-            print("File lost during read for modification")
-        print("modified ", str(path))
+            logging.error("File lost during read for modification")
+        logging.info("modified " + str(path))
 
     def on_move(self, path_from : pathlib.Path, path_to : pathlib.Path):
         self.dispatcher.move(str(path_from), str(path_to))
-        print("moved ", str(path_from), " to ", str(path_to))
+        logging.info("moved " + str(path_from) + " to " + str(path_to))
 
     def on_create(self, path : pathlib.Path, directory : bool):
         if (directory):
@@ -32,9 +33,9 @@ class EventHandler:
                 with open(file_path, 'rb') as f:
                     self.dispatcher.create_file(path, f)
             except FileNotFoundError:
-                print("file lost during read for create")
-        print("new ", str(path))
+                logging.error("File lost during read for modification")
+        logging.info("new " +  str(path))
 
     def on_delete(self, path : pathlib.Path, directory : bool):
         self.dispatcher.delete(path, directory)
-        print("deleted ", str(path))
+        logging.info("deleted " + str(path))
