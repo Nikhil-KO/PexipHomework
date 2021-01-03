@@ -8,8 +8,6 @@ import unittest
 import threading
 from client.observer import Observer
 
-# TODO make tests appear in separate folder
-
 class FakeHandler:
 
     def __init__(self) -> None:
@@ -33,7 +31,7 @@ class FakeHandler:
 test_completed : bool = False
 SLEEP_CONSTANT : float = 2
 fake_handler : FakeHandler = None
-root_dir : pathlib.Path = None
+root_dir : pathlib.Path = pathlib.Path('tests/listen/')
 letters = string.ascii_lowercase
 
 class ClientUnitTests(unittest.TestCase):
@@ -118,8 +116,8 @@ def run_observer(observer : Observer):
 
 def run():
     print("\nRunning client tests, takes ~30 seconds \nProgress bar given below")
-    global root_dir
-    root_dir = pathlib.Path('client/listen')
+    if not os.path.exists(root_dir):
+        os.makedirs(root_dir)
     global fake_handler
     fake_handler = FakeHandler()
     observer = Observer(root_dir, fake_handler.on_modify, fake_handler.on_move, fake_handler.on_create, fake_handler.on_delete)
@@ -128,6 +126,7 @@ def run():
     # REVIEW maybe this doesn't need a need thread to spin up?
     threading.Thread(target=run_tests).start()
     t1.join()
+    shutil.rmtree(root_dir)
     print("completed running client tests")
 
 if __name__ == "__main__":

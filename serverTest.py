@@ -1,4 +1,5 @@
 import os
+import shutil
 import string
 import random
 import pathlib
@@ -82,10 +83,13 @@ class ServerUnitTests(unittest.TestCase):
 
 def run():
     print("\nRunning server tests")
-    root_dir = pathlib.Path('server/server_data')
+    root_dir = pathlib.Path('tests/server_data/')
+    if not os.path.exists(root_dir):
+        os.makedirs(root_dir)
     global dropbox
     dropbox = DropBoxService(root_dir)
     unittest.main(exit=False)
+    shutil.rmtree(root_dir)
     print("completed running server tests")
     
 
