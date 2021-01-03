@@ -106,9 +106,8 @@ class ClientUnitTests(unittest.TestCase):
         self.assertEqual(str(fake_handler.deleted), str(path), "Observer did not detect file deletion")
 
 def run_tests():
-    print("running client tests")
     time.sleep(2*SLEEP_CONSTANT) # need to wait for client to set up
-    unittest.main()
+    unittest.main(exit=False)
     global test_completed
     test_completed = True
 
@@ -118,6 +117,7 @@ def run_observer(observer : Observer):
         time.sleep(SLEEP_CONSTANT)
 
 def run():
+    print("\nRunning client tests, takes ~30 seconds \nProgress bar given below")
     global root_dir
     root_dir = pathlib.Path('client/listen')
     global fake_handler
@@ -128,6 +128,7 @@ def run():
     # REVIEW maybe this doesn't need a need thread to spin up?
     threading.Thread(target=run_tests).start()
     t1.join()
+    print("completed running client tests")
 
 if __name__ == "__main__":
     run()
