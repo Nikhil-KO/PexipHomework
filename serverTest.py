@@ -81,10 +81,13 @@ class ServerUnitTests(unittest.TestCase):
 
 
 def run():
+    print("\nRunning server tests")
     root_dir = pathlib.Path('server/server_data')
     global dropbox
     dropbox = DropBoxService(root_dir)
-    unittest.main()
+    unittest.main(exit=False)
+    print("completed running server tests")
+    
 
 if __name__ == "__main__":
     run()
