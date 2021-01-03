@@ -68,7 +68,11 @@ class Observer:
 		for path, _, files in os.walk(self.root_path):
 			self.check_folder(path, active_folders)
 			for file in files:
-				self.check_file(path, file, active_files)
+				try:
+					self.check_file(path, file, active_files)
+				except FileNotFoundError:
+					# FIXME this needs to be reviewed
+					pass # file moved or deleted during pass
 		# check for deleted folders/files
 		deleted_folder = set(self.folder_details.keys()) - set(active_folders)
 		deleted_files = set(self.file_details.keys()) -  set(active_files)
