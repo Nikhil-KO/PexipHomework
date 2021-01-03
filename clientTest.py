@@ -10,6 +10,7 @@ from client.observer import Observer
 
 test_completed = False
 SLEEP_CONSTANT = 2
+letters = string.ascii_lowercase
 
 class FakeHandler:
 
@@ -39,7 +40,6 @@ class ClientUnitTests(unittest.TestCase):
         self.root_dir = root_dir
 
     def test_create_dir(self):
-        letters = string.ascii_lowercase
         folder_name = ''.join(random.choice(letters) for i in range(10))
         path = pathlib.Path(folder_name)
         test_folder = os.path.join(self.root_dir, path)
@@ -48,7 +48,6 @@ class ClientUnitTests(unittest.TestCase):
         self.assertEqual(str(self.handle.created), str(path), "Observer did not pick up directory being made")
 
     def test_create_file(self):
-        letters = string.ascii_lowercase
         file_name = ''.join(random.choice(letters) for i in range(10)) + ".txt"
         path = pathlib.Path(file_name)
         test_file = os.path.join(self.root_dir, path)
@@ -58,7 +57,6 @@ class ClientUnitTests(unittest.TestCase):
         self.assertEqual(str(self.handle.created), str(path), "Observer did not pick up file being made")
 
     def test_modify_file(self):
-        letters = string.ascii_lowercase
         file_name = ''.join(random.choice(letters) for i in range(10)) + ".txt"
         path = pathlib.Path(file_name)
         test_file = os.path.join(self.root_dir, path)
@@ -73,7 +71,6 @@ class ClientUnitTests(unittest.TestCase):
         self.assertEqual(str(self.handle.modified), str(path), "Observer did not pick up file being modified")
 
     def test_move_dir(self):
-        letters = string.ascii_lowercase
         folder_name = ''.join(random.choice(letters) for i in range(10))
         path = pathlib.Path(folder_name)
         test_folder = os.path.join(self.root_dir, path)
@@ -89,7 +86,6 @@ class ClientUnitTests(unittest.TestCase):
         self.assertTupleEqual((str(path), str(new_folder_name)), (str(self.handle.moved[0]), str(self.handle.moved[1])), "Observer did not detect folder move")
 
     def test_move_file(self):
-        letters = string.ascii_lowercase
         file_name = ''.join(random.choice(letters) for i in range(10)) + ".txt"
         path = pathlib.Path(file_name)
         test_file = os.path.join(self.root_dir, path)
@@ -107,7 +103,6 @@ class ClientUnitTests(unittest.TestCase):
         self.assertTupleEqual((path, new_path), (self.handle.moved[0], self.handle.moved[1]), "Observer did not detect file move")
 
     def delete_dir(self):
-        letters = string.ascii_lowercase
         folder_name = ''.join(random.choice(letters) for i in range(10))
         path = pathlib.Path(folder_name)
         test_folder = os.path.join(self.root_dir, path)
@@ -120,7 +115,6 @@ class ClientUnitTests(unittest.TestCase):
         self.assertEqual(str(self.handle.deleted), str(folder_name), "Observer did not detect folder deletion")
 
     def delete_file(self):
-        letters = string.ascii_lowercase
         file_name = ''.join(random.choice(letters) for i in range(10)) + ".txt"
         path = pathlib.Path(file_name)
         test_file = os.path.join(self.root_dir, path)
