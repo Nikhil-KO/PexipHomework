@@ -6,8 +6,6 @@ from dropboxService import DropBoxService
 
 app = flask.Flask(__name__)
 dropbox : DropBoxService = None
-# TODO make command line
-DATA_DIR = pathlib.Path("server_data/")
 
 @app.route('/', methods=["POST"])
 def update():
@@ -73,8 +71,14 @@ def move_directory():
 
 def main():
     print("starting server")
+    if len(sys.argv) < 2:
+        print("Need to provide path to folder to store files")
+        exit()
+    data_dir = pathlib.Path(sys.argv[1])
+    if not os.path.exists(data_dir):
+        print("Provided folder does not exist!")
     global dropbox
-    dropbox = DropBoxService(pathlib.Path("server_data/"))
+    dropbox = DropBoxService(data_dir)
     app.run(port=5000, host='0.0.0.0')
 
 if __name__ == "__main__":
