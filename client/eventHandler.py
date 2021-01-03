@@ -12,8 +12,11 @@ class EventHandler:
 
     def on_modify(self, path: pathlib.Path):
         file_path = os.path.join(self.root_path, path)
-        with open(file_path, 'rb') as f:
-            self.dispatcher.modify_file(path, f)
+        try:
+            with open(file_path, 'rb') as f:
+                self.dispatcher.modify_file(path, f)
+        except FileNotFoundError:
+            print("File lost during read for modification")
         print("modified ", str(path))
 
     def on_move(self, path_from : pathlib.Path, path_to : pathlib.Path):
@@ -25,8 +28,11 @@ class EventHandler:
             self.dispatcher.create_directory(str(path))
         else:
             file_path = os.path.join(self.root_path, path)
-            with open(file_path, 'rb') as f:
-                self.dispatcher.create_file(path, f)
+            try:
+                with open(file_path, 'rb') as f:
+                    self.dispatcher.create_file(path, f)
+            except FileNotFoundError:
+                print("file lost during read for create")
         print("new ", str(path))
 
     def on_delete(self, path : pathlib.Path, directory : bool):
