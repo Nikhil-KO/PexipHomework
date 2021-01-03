@@ -35,7 +35,7 @@ def main():
     root_dir = pathlib.Path(sys.argv[1])
     if not os.path.exists(root_dir):
         print("Provided folder does not exist!")
-        logging.error("attempt to input invalid listeing directory")
+        logging.error("attempt to input invalid listening directory")
         exit()
     root_path = pathlib.Path(root_dir)
     if len(sys.argv) >= 3:
