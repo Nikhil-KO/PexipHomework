@@ -3,7 +3,7 @@ Dropbox assignment for Pexip
 
 The only 'high level' level libraries used was Flask and requests and the libraries that come with them. They are given in the requirements.txt file.
 
-Much of Flasks functionality was not used, but because I was comfortable using it allowed to quicker prototyping than using the built in http module.
+Much of Flasks functionality was not used, but because I was comfortable with it, it allowed for quicker prototyping than using the built in http module.
 
 All the required base functionality (1.1 and 1.2) has been implement and partially unit tested. The Observer for client and dropboxService for server was unit tested, the other features were deemed simple enough to manually review. 
 
@@ -12,7 +12,10 @@ Bonus 1 was implemented as files/folders are only uploaded if change occurs, so 
 The final bonus of partial file was attempted but not fully implemented. I have the code to hash and maintain the partial register for each file, 
 but to implement the full soft rolling checksum outlined by https://rsync.samba.org/tech_report/node3.html would have taken more time and I didn't want to spend too long on it.
 
-I really wanted the solution to be cross platform so using built in libraries for the client (and requests). The basic overview is os.stat is used to maintain a hash map of file and folder {id's -> (stat, path)}, at intervals the Observer object searches for new, change or deleted files/folders and these changes translated to instructions by the EventHandler and then are dispatched to the server.
+I really wanted the solution to be cross platform so it was designed to use the built in libraries for the client (and requests). 
+
+## The basic overview:
+<code>os.stat</code> is used to maintain a hash map of file and folder. Each items id maps to that items statistic and path {id's -> (stat, path)}, at intervals the Observer object searches for new, change or deleted files/folders and these changes translated to instructions by the EventHandler object and then are dispatched to the server using the Dispatcher object.
 
 # File Structure
 * Client
@@ -26,7 +29,11 @@ I really wanted the solution to be cross platform so using built in libraries fo
     * server.py - flask network interface to receive the data
     * dropboxService.py - service to translate instructions and or data to changes in the server file system
 
-* testrunner.py - run unit tests for client & server functionality, the tests can also be run individually 
+* Tests
+    * the unit tests use this folder to generate and test Observer and DropboxService functionality
+
+* clientTest.py - run unit tests for client Observer functionality
+* serverTest.py - run unit tests for server DropboxService functionality
 
 # Run system
 Requires Python 3+.
@@ -39,11 +46,18 @@ Need to be in the directory of <code>client/</code> and <code>server/</code> res
     python server.py <dir to store>
     e.g. python server.py server_data/
 
+To run the tests, be in the repos root directory, where this readme is and run them as so
+
+    python clientTest.py
+
+    python serverTest.py
+
+The client test may take some time as the observer has a 2 second interval, give it 30 seconds to scan, it comes with progress bar.
+
 # Asumptions
-1. The initial folder is empty, it is any easy change to copy the init folder on launch/empty.
+1. The initial folder is empty, it is any easy change to copy the init folder on launch/empty it.
 2. Compressing files not required/provide speed up
 3. Not worried about system endianness
-4. Flask server address is edited in code
 5. Server url can be given in command line but default is local host on port 5000
 
 # Tests
